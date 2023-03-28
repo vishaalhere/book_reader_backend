@@ -2,7 +2,7 @@
     "version": 2,
     "name": "nodejs-express",
     "builds": [
-        { "src": "index.js", "use": "@now/node" }
+        { "src": "./dist/index.js", "use": "@now/node" }
     ],
     "routes": [
         { "src": "/(.*)", "dest": "./dist/index.js" }
