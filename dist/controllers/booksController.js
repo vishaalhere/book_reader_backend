@@ -1,8 +1,9 @@
 import { pool } from "../database.js";
 export const addBook = async (req, res, next) => {
     const { name, author, readTime, description, rating, cover, pdf } = req.body;
-    const buffer = Buffer.from(cover, 'base64');
-    await pool.query(`INSERT INTO books (name, author, readTime, description, rating, cover, pdf) VALUES  (?,?,?,?,?,?,?)`, [name, author, readTime, description, rating, buffer, pdf]);
+    const coverBuffer = Buffer.from(cover.split(',')[1], "base64");
+    const pdfBuffer = Buffer.from(pdf.split(',')[1], "base64");
+    await pool.query(`INSERT INTO books (name, author, readTime, description, rating, cover, pdf) VALUES  (?,?,?,?,?,?,?)`, [name, author, readTime, description, rating, coverBuffer, pdfBuffer]);
     res.send({
         success: true,
         message: "Book Added Successfully!!",

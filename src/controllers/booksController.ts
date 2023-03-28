@@ -1,27 +1,18 @@
 import { pool } from "../database.js";
 import express, { Express, Request, Response, NextFunction } from "express";
 
-interface bookInterface {
-  id: string;
-  name: string;
-  author: string;
-  readTime: string;
-  description: string;
-  cover: string;
-  pdf: string;
-}
-
 export const addBook = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { name, author, readTime, description, rating, cover, pdf } = req.body;
-  const buffer = Buffer.from(cover, 'base64');
+  const coverBuffer = Buffer.from(cover.split(',')[1], "base64");
+  const pdfBuffer = Buffer.from(pdf.split(',')[1], "base64");
 
   await pool.query(
     `INSERT INTO books (name, author, readTime, description, rating, cover, pdf) VALUES  (?,?,?,?,?,?,?)`,
-    [name, author, readTime, description, rating, buffer, pdf]
+    [name, author, readTime, description, rating, coverBuffer, pdfBuffer]
   );
   res.send({
     success:true,
