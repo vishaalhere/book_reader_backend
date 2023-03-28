@@ -1,8 +1,8 @@
 import { pool } from "../database.js";
 export const addBook = async (req, res, next) => {
     const { name, author, readTime, description, rating, cover, pdf } = req.body;
-    const coverBuffer = Buffer.from(cover.split(',')[1], "base64");
-    const pdfBuffer = Buffer.from(pdf.split(',')[1], "base64");
+    const coverBuffer = Buffer.from(cover.split(",")[1], "base64");
+    const pdfBuffer = Buffer.from(pdf.split(",")[1], "base64");
     await pool.query(`INSERT INTO books (name, author, readTime, description, rating, cover, pdf) VALUES  (?,?,?,?,?,?,?)`, [name, author, readTime, description, rating, coverBuffer, pdfBuffer]);
     res.send({
         success: true,
@@ -30,6 +30,16 @@ export const getBookById = async (req, res, next) => {
         success: true,
         message: "Book Fetched Successfully!!",
         book,
+    });
+};
+export const deleteBook = async (req, res, next) => {
+    const { id } = req.params;
+    await pool.query(`DELETE FROM books WHERE id = ?`, [
+        id,
+    ]);
+    res.send({
+        success: true,
+        message: "Book Deleted Successfully!!",
     });
 };
 export const rateBook = async (req, res, next) => {
